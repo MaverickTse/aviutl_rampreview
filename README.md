@@ -1,4 +1,6 @@
-# 拡張編集RAMプレビュー
+# 拡張編集RAMプレビュー 
+
+# ExEdit RAM Preview (English Mod)
 
 拡張編集RAMプレビュー は AviUtl での描画結果をキャッシュし、キャッシュからの再生を行えるようにするための AviUtl プラグインです。
 
