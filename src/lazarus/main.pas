@@ -116,10 +116,10 @@ uses
   Hook, NV12, Util, Ver;
 
 const
-  PluginName = '拡張編集RAMプレビュー';
-  PluginNameANSI = #$8a#$67#$92#$a3#$95#$d2#$8f#$57#$52#$41#$4d#$83#$76#$83#$8c#$83#$72#$83#$85#$81#$5b;
+  PluginName = 'Exedit RAM Preview';
+  PluginNameANSI = 'Exedit RAM Preview';
   PluginInfoANSI = PluginNameANSI + ' ' + Version;
-  PluginNameAudioANSI = #$8a#$67#$92#$a3#$95#$d2#$8f#$57#$52#$41#$4d#$83#$76#$83#$8c#$83#$72#$83#$85#$81#$5b#$28#$89#$b9#$90#$ba#$29;
+  PluginNameAudioANSI = 'Exedit RAM Preview-Audio';
   PluginInfoAudioANSI = PluginNameAudioANSI + ' ' + Version;
   OutputPluginNameANSI = PluginNameANSI;
   OutputPluginInfoANSI = PluginNameANSI + ' ' + Version;
@@ -127,7 +127,7 @@ const
   PluginInfoExtramANSI = PluginNameExtramANSI + ' ' + Version;
 
 const
-  OutputFilter = #$8E#$E8#$93#$AE#$82#$C5#$8E#$67#$82#$A4#$82#$B1#$82#$C6#$82#$CD#$82#$C5#$82#$AB#$82#$DC#$82#$B9#$82#$F1#$00#$44#$4F#$20#$4E#$4F#$54#$20#$55#$53#$45#$20#$54#$48#$49#$53#$00#$00;
+  OutputFilter = 'DO NOT USE THIS';
   BoolConv: array[boolean] of AviUtlBool = (AVIUTL_FALSE, AVIUTL_TRUE);
   ScaleMap: array[0..3] of integer = (1, 1, 2, 4);
 
@@ -343,11 +343,11 @@ function TRamPreview.MainProc(Window: HWND; Message: UINT; WP: WPARAM;
   LP: LPARAM; Edit: Pointer; Filter: PFilter): integer;
 const
   PROCESSOR_ARCHITECTURE_AMD64 = 9;
-  ToggleModeCaption = #$93#$ae#$8d#$ec#$83#$82#$81#$5b#$83#$68#$90#$d8#$82#$e8#$91#$d6#$82#$a6#$81#$69#$92#$ca#$8f#$ed#$81#$5e#$52#$41#$4d#$83#$76#$83#$8c#$83#$72#$83#$85#$81#$5b#$81#$6a;
+  ToggleModeCaption = 'Switch Mode (Normal/RAM Preview)';
   // 動作モード切り替え（通常／RAMプレビュー）
-  CaptureCaption = #$91#$49#$91#$f0#$94#$cd#$88#$cd#$82#$a9#$82#$e7#$83#$4c#$83#$83#$83#$62#$83#$56#$83#$85#$8d#$ec#$90#$ac;
+  CaptureCaption = 'Cache Selected';
   // 選択範囲からキャッシュ作成
-  ClearCacheCaption = #$83#$4c#$83#$83#$83#$62#$83#$56#$83#$85#$8f#$c1#$8b#$8e;
+  ClearCacheCaption = 'Clear Cache';
   // キャッシュ消去
 var
   Y, Height: integer;
@@ -381,9 +381,9 @@ begin
       FPlayModeList := CreateWindowW('LISTBOX', nil, WS_BORDER or
         WS_CHILD or WS_VISIBLE or LBS_NOTIFY, 8, Y, 160, 160,
         Window, 1, Filter^.DLLHInst, nil);
-      SendMessageW(FPlayModeList, LB_ADDSTRING, 0, LPARAM(PWideChar('通常')));
+      SendMessageW(FPlayModeList, LB_ADDSTRING, 0, LPARAM(PWideChar('Normal')));
       SendMessageW(FPlayModeList, LB_ADDSTRING, 0,
-        LPARAM(PWideChar('RAMプレビュー')));
+        LPARAM(PWideChar('RAM Preview')));
       SendMessageW(FPlayModeList, LB_SETCURSEL, 0, 0);
       SendMessageW(FPlayModeList, WM_SETFONT, WPARAM(FFont), 0);
       Height := SendMessage(FPlayModeList, LB_GETITEMHEIGHT, 0, 0) *
@@ -393,7 +393,7 @@ begin
 
       Height := FFontHeight + GetSystemMetrics(SM_CYEDGE) * 2;
       FCacheCreateButton := CreateWindowW('BUTTON',
-        '選択範囲からキャッシュ作成', WS_CHILD or
+        'Cache Selected', WS_CHILD or
         WS_VISIBLE, 8, Y, 160, Height, Window, 2, Filter^.DLLHInst, nil);
       SendMessageW(FCacheCreateButton, WM_SETFONT, WPARAM(FFont), 0);
       Inc(Y, Height);
@@ -403,27 +403,27 @@ begin
         WS_VISIBLE or CBS_DROPDOWNLIST, 8, Y, 160, Height + 300,
         Window, 3, Filter^.DLLHInst, nil);
       SendMessageW(FResolutionComboBox, CB_ADDSTRING, 0,
-        {%H-}LPARAM(PWideChar('無圧縮')));
+        {%H-}LPARAM(PWideChar('No Compression')));
       SendMessageW(FResolutionComboBox, CB_ADDSTRING, 0,
-        {%H-}LPARAM(PWideChar('通常品質'))); // 1/4
+        {%H-}LPARAM(PWideChar('Normal'))); // 1/4
       SendMessageW(FResolutionComboBox, CB_ADDSTRING, 0,
-        {%H-}LPARAM(PWideChar('解像度1/2'))); // 1/16
+        {%H-}LPARAM(PWideChar('Half Resolution'))); // 1/16
       SendMessageW(FResolutionComboBox, CB_ADDSTRING, 0,
-        {%H-}LPARAM(PWideChar('解像度1/4'))); // 1/64
+        {%H-}LPARAM(PWideChar('1/4 Resolution'))); // 1/64
       SendMessageW(FResolutionComboBox, WM_SETFONT, WPARAM(FFont), 0);
       SendMessageW(FResolutionComboBox, CB_SETCURSEL, 1, 0);
       Inc(Y, Height);
 
       Height := FFontHeight + GetSystemMetrics(SM_CYEDGE) * 2;
       FDrawFrameCheckBox := CreateWindowW('BUTTON',
-        'プレビュー中は赤枠を描画', BS_CHECKBOX or
+        'Draw Red Frame in Preview', BS_CHECKBOX or
         WS_CHILD or WS_VISIBLE, 8, Y, 160, Height, Window, 5, Filter^.DLLHInst, nil);
       SendMessageW(FDrawFrameCheckBox, WM_SETFONT, WPARAM(FFont), 0);
       Inc(Y, Height + 8);
       DrawFrame := True;
 
       Height := FFontHeight + GetSystemMetrics(SM_CYEDGE) * 2;
-      FCacheClearButton := CreateWindowW('BUTTON', PWideChar('キャッシュ消去'),
+      FCacheClearButton := CreateWindowW('BUTTON', PWideChar('Clear Cache'),
         WS_CHILD or WS_VISIBLE, 8, Y, 160, Height, Window, 4,
         Filter^.DLLHInst, nil);
       SendMessageW(FCacheClearButton, WM_SETFONT, WPARAM(FFont), 0);
@@ -444,10 +444,10 @@ begin
         GetNativeSystemInfo(@si);
         if si.wProcessorArchitecture <> PROCESSOR_ARCHITECTURE_AMD64 then
           raise Exception.Create(PluginName +
-            ' をを使うには 64bit 版の Windows が必要です。');
+            ' requires 64bit Windows');
         if sinfo.Build < 10000 then
           raise Exception.Create(PluginName +
-            ' を使うには AviUtl version 1.00 以降が必要です。');
+            ' requires AviUtl version 1.00 or later');
 
         Filter^.ExFunc^.AddMenuItem(Filter, CaptureCaption, Window,
           100, VK_R, ADD_MENU_ITEM_FLAG_KEY_CTRL);
@@ -460,12 +460,12 @@ begin
         begin
           SetWindowTextW(Window,
             PWideChar(WideString(PluginName +
-            ' - 初期化に失敗したため使用できません')));
+            ' - initialization failed')));
           MessageBoxW(FMainWindow,
             PWideChar(PluginName +
-            ' の初期化中にエラーが発生しました。'#13#10#13#10 +
+            ' throw during initialization.'#13#10#13#10 +
             WideString(E.Message)),
-            PWideChar('初期化エラー - ' + PluginName), MB_ICONERROR);
+            PWideChar('Initialization Error - ' + PluginName), MB_ICONERROR);
         end;
       end;
       Result := AVIUTL_FALSE;
@@ -535,7 +535,7 @@ begin
       except
         on E: Exception do
           MessageBoxW(FWindow, PWideChar(
-            WideString('処理中にエラーが発生しました。'#13#10#13#10 +
+            WideString('Error while processing'#13#10#13#10 +
             WideString(E.Message))),
             PluginName, MB_ICONERROR);
       end;
@@ -553,7 +553,7 @@ begin
       except
         on E: Exception do
           MessageBoxW(FWindow, PWideChar(
-            WideString('処理中にエラーが発生しました。'#13#10#13#10 +
+            WideString('Error while processing'#13#10#13#10 +
             WideString(E.Message))),
             PluginName, MB_ICONERROR);
       end;
@@ -679,7 +679,7 @@ begin
       if FErrorMessage = '' then
       begin
         FErrorMessage := WideString(
-          'ビデオ処理中にエラーが発生しました。'#13#10#13#10 +
+          'Error during video processing'#13#10#13#10 +
           E.Message);
         if not FCapturing then
           MessageBoxW(FWindow,
@@ -718,7 +718,7 @@ begin
       if FErrorMessage = '' then
       begin
         FErrorMessage := WideString(
-          'オーディオ処理中にエラーが発生しました。'#13#10#13#10 +
+          'Error during Audio processing'#13#10#13#10 +
           E.Message);
         if not FCapturing then
           MessageBoxW(FWindow,
@@ -794,17 +794,17 @@ begin
     FParallel := TParallel.Create(TThread.ProcessorCount);
 
     if Filter^.ExFunc^.GetSysInfo(nil, @SI) = AVIUTL_FALSE then
-      raise Exception.Create('AviUtl のシステム情報取得に失敗しました');
+      raise Exception.Create('Fail to get AviUtl system info');
 
     Len := Max(SI.MaxW, 1280) * Max(SI.MaxH, 720) * SizeOf(TPixelYC);
     FMappedFile := CreateFileMappingW(INVALID_HANDLE_VALUE, nil,
       PAGE_READWRITE, 0, DWORD((Len + SizeOf(TViewHeader)) and $ffffffff), nil);
     if FMappedFile = 0 then
-      raise Exception.Create('CreateFileMapping に失敗しました');
+      raise Exception.Create('CreateFileMapping Failed');
 
     P := MapViewOfFile(FMappedFile, FILE_MAP_WRITE, 0, 0, 0);
     if P = nil then
-      raise Exception.Create('MapViewOfFile に失敗しました');
+      raise Exception.Create('MapViewOfFile Failed');
     FMappedViewHeader := P;
     FMappedViewData := P;
     Inc(FMappedViewData, SizeOf(TViewHeader));
@@ -817,7 +817,7 @@ begin
   except
     on E: Exception do
       MessageBoxW(Filter^.Hwnd,
-        PWideChar(WideString('初期化中にエラーが発生しました。'#13#10#13#10 + WideString(E.Message))), PluginName, MB_ICONERROR);
+        PWideChar(WideString('Error during initialization.'#13#10#13#10 + WideString(E.Message))), PluginName, MB_ICONERROR);
   end;
 end;
 
@@ -840,7 +840,7 @@ begin
   except
     on E: Exception do
       MessageBoxW(Filter^.Hwnd,
-        PWideChar(WideString('初期化中にエラーが発生しました。'#13#10#13#10 + WideString(E.Message))), PluginName, MB_ICONERROR);
+        PWideChar(WideString('Error during initialization.'#13#10#13#10 + WideString(E.Message))), PluginName, MB_ICONERROR);
   end;
 end;
 
@@ -1268,16 +1268,16 @@ var
   Freq, Start, Finish: int64;
 begin
   if Filter^.ExFunc^.GetSysInfo(nil, @SI) = AVIUTL_FALSE then
-    raise Exception.Create('AviUtl のシステム情報取得に失敗しました');
+    raise Exception.Create('Fail to get AviUtl system info');
 
   FillChar(FI, SizeOf(TFileInfo), 0);
   if Filter^.ExFunc^.GetFileInfo(Edit, @FI) = AVIUTL_FALSE then
     raise Exception.Create(
-      '編集中のファイルの情報取得に失敗しました');
+      'Fail to get info of editing file');
   if (FI.Width = 0) or (FI.Height = 0) then
     Exit;
   if Filter^.ExFunc^.GetSelectFrame(Edit, FStartFrame, FEndFrame) = AVIUTL_FALSE then
-    raise Exception.Create('選択範囲を取得できませんでした');
+    raise Exception.Create('Unable to capture selection');
 
   Clear();
 
@@ -1349,7 +1349,7 @@ begin
     else
     begin
       MessageBoxW(FWindow, PWideChar(
-        'キャッシュデータの作成中にエラーが発生しました。'#13#10#13#10 + FErrorMessage),
+        'Error while creating cache'#13#10#13#10 + FErrorMessage),
         PluginName, MB_ICONERROR);
     end;
   end;
@@ -1402,7 +1402,7 @@ begin
     begin
       raise Exception.Create('failed to execute: ZRamPreview.exe'#13#10 +
         WideString(E.Message) + #13#10#13#10 +
-        'アンチウィルスソフトがプログラム実行を阻害していないか確認してください。'#13#10 + 'また、AviUtl が日本語やスペースが含まれている場所にある場合は "C:\AviUtl\AviUtl.exe" などに移動してみてください。');
+        'Please check if antivirus software is blocking execution.'#13#10 + 'In addition, Aviutl PATH should be alphanumeric only.');
     end;
   end;
   FRemoteProcess.CloseStderr;
@@ -1422,7 +1422,7 @@ begin
   except
     on E: Exception do
       MessageBoxW(FWindow, PWideChar(
-        WideString('DuplicateHandle でエラーが発生しました。'#13#10#13#10 +
+        WideString('Error at DuplicateHandle'#13#10#13#10 +
         WideString(E.Message))),
         PluginName, MB_ICONERROR);
   end;
