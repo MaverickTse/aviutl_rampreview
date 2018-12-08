@@ -102,7 +102,7 @@ begin
 
   if Value < KILLO1000 then
   begin
-    Result := IntToStr(Value) + s + 'バイト';
+    Result := IntToStr(Value) + s + 'byte';
     Exit;
   end
   else if Value < MEGA1000 then
