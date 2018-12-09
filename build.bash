@@ -1,5 +1,5 @@
 #!/bin/bash
-
+command -v go.exe >/dev/null 2>&1 || { echo >&2 "go.exe is required but cannot be found.  Aborting."; exit 1; }
 mkdir -p bin/script
 
 # copy readme
@@ -31,6 +31,8 @@ EOS
 
 # build ZRamPreview.exe
 pushd src/go > /dev/null
+go.exe get "github.com/oov/aviutl_rampreview/src/go/ipc"
+go.exe get "github.com/oov/aviutl_rampreview/src/go/ods"
 go.exe build -x -ldflags="-s" -o ../../bin/ZRamPreview.exe
 popd > /dev/null
 
